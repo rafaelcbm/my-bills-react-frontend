@@ -1,12 +1,12 @@
 import React, { useContext } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
-import { Context } from './Context/AuthContext';
+import { AuthContext } from './Context/AuthContext';
 
 import Login from './pages/Login';
 import Categories from './pages/Categories';
 
 function CustomRoute({ isPrivate, ...rest }) {
-  const { loading, authenticated } = useContext(Context);
+  const { loading, authenticated } = useContext(AuthContext);
 
   if (loading) {
     return <h1>Loading...</h1>;

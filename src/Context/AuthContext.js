@@ -1,7 +1,7 @@
 import React, { createContext } from 'react';
 import useAuth from '../hooks/useAuth';
 
-const Context = createContext();
+const AuthContext = createContext();
 
 function AuthProvider({ children }) {
   const {
@@ -9,13 +9,13 @@ function AuthProvider({ children }) {
   } = useAuth();
 
   return (
-    <Context.Provider value={{
+    <AuthContext.Provider value={{
       loading, authenticated, handleLogin, handleLogout,
     }}
     >
       {children}
-    </Context.Provider>
+    </AuthContext.Provider>
   );
 }
 
-export { Context, AuthProvider };
+export { AuthContext, AuthProvider };

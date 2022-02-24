@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 
 import api from '../api';
-import { Context } from '../Context/AuthContext';
+import { AuthContext } from '../Context/AuthContext';
 import useCategories from '../hooks/useCategories';
 
 import Category from './Category';
@@ -10,7 +10,7 @@ export default function Categories() {
   const {
     getCategories, addCategory, updateCategory, deleteCategory
   } = useCategories();
-  const { handleLogout } = useContext(Context);
+  const { handleLogout } = useContext(AuthContext);
   const [categories, setCategories] = useState([]);
   const [newCategory, setNewCategory] = useState('');
 
