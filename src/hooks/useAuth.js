@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import api from '../api';
+import api, { handleApiError } from '../api';
 
 import history from '../history';
 
@@ -19,14 +19,18 @@ export default function useAuth() {
   }, []);
 
   async function handleLogin(email, password) {
-    const { data: { accessToken } } = await api.post('/login', {
-      email, password,
-    });
+    try {
+      const { data: { accessToken } } = await api.post('/login', {
+        email, password,
+      });
 
-    localStorage.setItem('token', JSON.stringify(accessToken));
-    api.defaults.headers['x-access-token'] = `${accessToken}`;
-    setAuthenticated(true);
-    history.push('/categories');
+      localStorage.setItem('token', JSON.stringify(accessToken));
+      api.defaults.headers['x-access-token'] = `${accessToken}`;
+      setAuthenticated(true);
+      history.push('/categories');
+    } catch (error) {
+      handleApiError(error);
+    }
   }
 
   function handleLogout() {
