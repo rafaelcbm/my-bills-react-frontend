@@ -1,55 +1,72 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useReducer, useState } from 'react';
 import { CategoriesContext } from '../Context/CategoriesContext';
+
+const initialState = {
+  enableEdit: false,
+  showEdit: true,
+  showSave: false,
+  showCancel: false,
+  showDelete: false
+};
+
+function reducer(state, action) {
+  switch (action) {
+    case 'edit':
+      return {
+        enableEdit: true,
+        showEdit: false,
+        showSave: true,
+        showCancel: true,
+        showDelete: true
+      };
+    case 'save':
+      return {
+        enableEdit: false,
+        showEdit: true,
+        showSave: false,
+        showCancel: false,
+        showDelete: false
+      };
+    case 'cancel':
+      return {
+        enableEdit: false,
+        showEdit: true,
+        showSave: false,
+        showCancel: false,
+        showDelete: false
+      };
+    default:
+      return initialState;
+  }
+}
 
 export default function Category({ category }) {
   const [categoryName, setCategoryName] = useState('');
-  const [enableEdit, setEnableEdit] = useState(false);
-  const [showEdit, setShowEdit] = useState(true);
-  const [showSave, setShowSave] = useState(false);
-  const [showCancel, setShowCancel] = useState(false);
-  const [showDelete, setShowDelete] = useState(false);
+  const [fieldState, dispatchFieldUpdate] = useReducer(reducer, initialState);
 
   const {
     updateCategory, deleteCategory, getCategories, setCategories
   } = useContext(CategoriesContext);
 
   async function onSaveBtnClick() {
-    await updateCategory(categoryName, category.id);
-    await getCategories(setCategories);
-
+    dispatchFieldUpdate('save');
     setCategoryName('');
 
-    setEnableEdit(false);
-    setShowSave(false);
-    setShowEdit(true);
-    setShowCancel(false);
-    setShowDelete(false);
+    await updateCategory(categoryName, category.id);
+    await getCategories(setCategories);
   }
 
   async function onDeleteBtnClick() {
+    dispatchFieldUpdate('delete');
+
     await deleteCategory(category.id);
     await getCategories(setCategories);
-  }
-
-  function onEditBtnClick() {
-    setEnableEdit(true);
-    setShowSave(true);
-    setShowEdit(false);
-    setShowCancel(true);
-    setShowDelete(true);
-  }
-
-  function onCancelBtnClick() {
-    setEnableEdit(false);
-    setShowEdit(true);
-    setShowSave(false);
-    setShowCancel(false);
   }
 
   return (
     <li>
       {category.name}
-      {enableEdit && (
+      {fieldState.enableEdit && (
       <input
         type="text"
         value={categoryName}
@@ -59,10 +76,10 @@ export default function Category({ category }) {
         placeholder={category.name}
       />
       )}
-      {showEdit && <button type="button" onClick={onEditBtnClick}>Edit</button>}
-      {showSave && <button type="button" onClick={onSaveBtnClick}>Save</button>}
-      {showCancel && <button type="button" onClick={onCancelBtnClick}>Cancel</button>}
-      {showDelete && <button type="button" onClick={onDeleteBtnClick}>Delete</button>}
+      {fieldState.showEdit && <button type="button" onClick={() => dispatchFieldUpdate('edit')}>Edit</button>}
+      {fieldState.showSave && <button type="button" onClick={onSaveBtnClick}>Save</button>}
+      {fieldState.showCancel && <button type="button" onClick={() => dispatchFieldUpdate('cancel')}>Cancel</button>}
+      {fieldState.showDelete && <button type="button" onClick={onDeleteBtnClick}>Delete</button>}
     </li>
 
   );
