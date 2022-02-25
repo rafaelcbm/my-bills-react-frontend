@@ -1,10 +1,12 @@
 import api from '../api';
 
 export default function useCategories() {
-  const getCategories = async (callBack) => {
+  async function getCategories(updateDataCallback) {
     const { data } = await api.get('/categories');
-    callBack(data);
-  };
+    if (updateDataCallback && data) {
+      updateDataCallback(data);
+    }
+  }
 
   const addCategory = async (categoryName) => {
     await api.post('/categories', {

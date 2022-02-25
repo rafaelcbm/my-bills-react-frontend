@@ -1,32 +1,21 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 
-import api from '../api';
 import { AuthContext } from '../Context/AuthContext';
-import useCategories from '../hooks/useCategories';
+import { CategoriesContext } from '../Context/CategoriesContext';
 
 import Category from './Category';
 
 export default function Categories() {
-  const {
-    getCategories, addCategory, updateCategory, deleteCategory
-  } = useCategories();
   const { handleLogout } = useContext(AuthContext);
-  const [categories, setCategories] = useState([]);
   const [newCategory, setNewCategory] = useState('');
 
   useEffect(() => {
     getCategories(setCategories);
   }, []);
 
-  const updateCategoryCallback = async (categoryName, categoryId) => {
-    await updateCategory(categoryName, categoryId);
-    await getCategories(setCategories);
-  };
-
-  const deleteCategoryCallback = async (categoryId) => {
-    await deleteCategory(categoryId);
-    await getCategories(setCategories);
-  };
+  const {
+    categories, getCategories, setCategories, addCategory
+  } = useContext(CategoriesContext);
 
   const addCategoryBtnClick = async () => {
     await addCategory(newCategory);
@@ -41,8 +30,6 @@ export default function Categories() {
           <Category
             key={category.id}
             category={category}
-            updateCategory={updateCategoryCallback}
-            deleteCategory={deleteCategoryCallback}
           />
         ))}
       </ul>
@@ -58,6 +45,7 @@ export default function Categories() {
       />
 
       <button type="button" onClick={addCategoryBtnClick}>Add</button>
+
       <br />
       <br />
 

@@ -5,13 +5,16 @@ import Routes from './routes';
 import history from './history';
 
 import { AuthProvider } from './Context/AuthContext';
+import { CategoriesProvider } from './Context/CategoriesContext';
 
 function App() {
   return (
     <AuthProvider>
-      <Router history={history}>
-        <Routes />
-      </Router>
+      <CategoriesProvider>
+        <Router history={history}>
+          <Routes />
+        </Router>
+      </CategoriesProvider>
     </AuthProvider>
   );
 }

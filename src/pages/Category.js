@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
+import { CategoriesContext } from '../Context/CategoriesContext';
 
-export default function Category({ category, updateCategory, deleteCategory }) {
+export default function Category({ category }) {
   const [categoryName, setCategoryName] = useState('');
   const [enableEdit, setEnableEdit] = useState(false);
   const [showEdit, setShowEdit] = useState(true);
@@ -8,19 +9,26 @@ export default function Category({ category, updateCategory, deleteCategory }) {
   const [showCancel, setShowCancel] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
 
-  function onSaveBtnClick() {
-    updateCategory(categoryName, category.id);
+  const {
+    updateCategory, deleteCategory, getCategories, setCategories
+  } = useContext(CategoriesContext);
+
+  async function onSaveBtnClick() {
+    await updateCategory(categoryName, category.id);
+    await getCategories(setCategories);
+
     setCategoryName('');
 
     setEnableEdit(false);
     setShowSave(false);
     setShowEdit(true);
     setShowCancel(false);
-    setShowDelete(true);
+    setShowDelete(false);
   }
 
-  function onDeleteBtnClick() {
-    deleteCategory(category.id);
+  async function onDeleteBtnClick() {
+    await deleteCategory(category.id);
+    await getCategories(setCategories);
   }
 
   function onEditBtnClick() {
@@ -28,6 +36,7 @@ export default function Category({ category, updateCategory, deleteCategory }) {
     setShowSave(true);
     setShowEdit(false);
     setShowCancel(true);
+    setShowDelete(true);
   }
 
   function onCancelBtnClick() {
@@ -38,7 +47,6 @@ export default function Category({ category, updateCategory, deleteCategory }) {
   }
 
   return (
-
     <li>
       {category.name}
       {enableEdit && (
@@ -52,9 +60,9 @@ export default function Category({ category, updateCategory, deleteCategory }) {
       />
       )}
       {showEdit && <button type="button" onClick={onEditBtnClick}>Edit</button>}
-      {showSave && <button type="button" onClick={() => onSaveBtnClick(category)}>Save</button>}
+      {showSave && <button type="button" onClick={onSaveBtnClick}>Save</button>}
       {showCancel && <button type="button" onClick={onCancelBtnClick}>Cancel</button>}
-      {showCancel && <button type="button" onClick={() => onDeleteBtnClick()}>Delete</button>}
+      {showDelete && <button type="button" onClick={onDeleteBtnClick}>Delete</button>}
     </li>
 
   );
