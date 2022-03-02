@@ -1,10 +1,16 @@
 import React, { useContext } from 'react';
-import { Switch, Route, Redirect } from 'react-router-dom';
+import {
+  Switch, Route, Redirect, Link
+} from 'react-router-dom';
 import { AuthContext } from './Context/AuthContext';
+
+import './App.css';
 
 import Login from './pages/Login';
 import Categories from './pages/Categories';
-import Pagina404 from './pages/Pagina404';
+import Page404 from './pages/Page404';
+import Bills from './pages/Bills';
+import Logout from './components/Logout';
 
 function CustomRoute({ isPrivate, ...rest }) {
   const { loading, authenticated } = useContext(AuthContext);
@@ -22,13 +28,34 @@ function CustomRoute({ isPrivate, ...rest }) {
 
 export default function Routes() {
   return (
-    <Switch>
-      <CustomRoute isPrivate exact path="/" component={Categories} />
-      <CustomRoute exact path="/login" component={Login} />
-      <CustomRoute isPrivate exact path="/categories" component={Categories} />
-      <Route>
-        <Pagina404 />
-      </Route>
-    </Switch>
+    <div>
+      <nav>
+        <ul>
+          <li>
+            <Link to="/">Home</Link>
+          </li>
+          <li>
+            <Link to="/categories">Categories</Link>
+          </li>
+          <li>
+            <Link to="/bills">Bills</Link>
+          </li>
+          <li className="logout">
+            <Logout />
+          </li>
+        </ul>
+      </nav>
+      <div className="App">
+        <Switch>
+          <CustomRoute isPrivate exact path="/" component={Categories} />
+          <CustomRoute exact path="/login" component={Login} />
+          <CustomRoute isPrivate exact path="/categories" component={Categories} />
+          <CustomRoute isPrivate exact path="/bills" component={Bills} />
+          <Route>
+            <Page404 />
+          </Route>
+        </Switch>
+      </div>
+    </div>
   );
 }
