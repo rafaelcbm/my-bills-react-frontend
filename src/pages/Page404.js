@@ -1,6 +1,6 @@
 import React from 'react';
 
-function Pagina404() {
+function Page404() {
   return (
     <h1>
       Ops, Page not found!
@@ -8,4 +8,4 @@ function Pagina404() {
   );
 }
 
-export default Pagina404;
+export default Page404;

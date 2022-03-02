@@ -1,12 +1,10 @@
 import React, { useState, useContext, useEffect } from 'react';
 
-import { AuthContext } from '../Context/AuthContext';
 import { CategoriesContext } from '../Context/CategoriesContext';
 
-import Category from './Category';
+import Category from '../components/Category';
 
 export default function Categories() {
-  const { handleLogout } = useContext(AuthContext);
   const [newCategory, setNewCategory] = useState('');
 
   useEffect(() => {
@@ -24,32 +22,32 @@ export default function Categories() {
   };
 
   return (
-    <>
-      <ul>
-        {categories.map((category) => (
-          <Category
-            key={category.id}
-            category={category}
-          />
-        ))}
-      </ul>
+    <div className="form-control">
+      <div className="form-control">
+        <ul className="categories">
+          {categories.map((category) => (
+            <Category
+              key={category.id}
+              category={category}
+            />
+          ))}
+        </ul>
+      </div>
 
-      <br />
-      <input
-        type="text"
-        value={newCategory}
-        onChange={(event) => {
-          setNewCategory(event.target.value);
-        }}
-        placeholder="Category Name"
-      />
+      <div className="form-control">
+        <input
+          type="text"
+          value={newCategory}
+          onChange={(event) => {
+            setNewCategory(event.target.value);
+          }}
+          placeholder="Category Name"
+        />
+      </div>
 
-      <button type="button" onClick={addCategoryBtnClick}>Add</button>
-
-      <br />
-      <br />
-
-      <button type="button" onClick={handleLogout}>Sair</button>
-    </>
+      <div className="form-control">
+        <button type="button" onClick={addCategoryBtnClick}>Add</button>
+      </div>
+    </div>
   );
 }
