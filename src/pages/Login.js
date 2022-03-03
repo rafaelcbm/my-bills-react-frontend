@@ -55,7 +55,7 @@ export default function Login() {
             type="submit"
             disabled={!formik.isValid || formik.isSubmitting}
           >
-            Submit
+            Login
           </button>
 
         </Form>

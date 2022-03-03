@@ -1,14 +1,10 @@
-import React, {
-  createContext, useContext, useState
-} from 'react';
+import React, { createContext, useState } from 'react';
 import useCategories from '../hooks/useCategories';
-import { AuthContext } from './AuthContext';
 
 const CategoriesContext = createContext();
 
 function CategoriesProvider({ children }) {
   const [categories, setCategories] = useState([]);
-  const { authenticated } = useContext(AuthContext);
 
   const {
     getCategories, addCategory, updateCategory, deleteCategory
