@@ -2,15 +2,17 @@ import React, { useContext } from 'react';
 import {
   Switch, Route, Redirect, Link
 } from 'react-router-dom';
+
+import { Container, Grid } from '@mui/material';
 import { AuthContext } from './Context/AuthContext';
+import './App/App.css';
 
-import './App.css';
-
-import Login from './pages/Login';
 import Categories from './pages/Categories';
 import Page404 from './pages/Page404';
 import Bills from './pages/Bills';
-import Logout from './components/Logout';
+import BillsMonth from './pages/BillsMonth.page';
+import Header from './components/Header';
+import BillsMonth2 from './pages/BillsMonth2.page';
 
 function CustomRoute({ isPrivate, ...rest }) {
   const { loading, authenticated } = useContext(AuthContext);
@@ -23,39 +25,31 @@ function CustomRoute({ isPrivate, ...rest }) {
     return <Redirect to="/login" />;
   }
 
-  return <Route {...rest} />;
+  return (
+    <Grid container>
+      <Grid item xs={12}>
+        <Header />
+      </Grid>
+      <Grid item xs={12}>
+        <Container maxWidth="md">
+          <Route {...rest} />
+        </Container>
+      </Grid>
+    </Grid>
+
+  );
 }
 
 export default function Routes() {
   return (
-    <div>
-      <nav>
-        <ul>
-          <li>
-            <Link to="/">Home</Link>
-          </li>
-          <li>
-            <Link to="/categories">Categories</Link>
-          </li>
-          <li>
-            <Link to="/bills">Bills</Link>
-          </li>
-          <li className="logout">
-            <Logout />
-          </li>
-        </ul>
-      </nav>
-      <div className="App">
-        <Switch>
-          <CustomRoute isPrivate exact path="/" component={Categories} />
-          <CustomRoute exact path="/login" component={Login} />
-          <CustomRoute isPrivate exact path="/categories" component={Categories} />
-          <CustomRoute isPrivate exact path="/bills" component={Bills} />
-          <Route>
-            <Page404 />
-          </Route>
-        </Switch>
-      </div>
-    </div>
+    <Switch>
+      <CustomRoute isPrivate exact path="/" component={Categories} />
+      <CustomRoute isPrivate exact path="/categories" component={Categories} />
+      <CustomRoute isPrivate exact path="/bills-month" component={BillsMonth2} />
+      <CustomRoute isPrivate exact path="/bills" component={Bills} />
+      <Route>
+        <Page404 />
+      </Route>
+    </Switch>
   );
 }
