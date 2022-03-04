@@ -39,13 +39,13 @@ export default function Login() {
       {(formik) => (
         <Form>
 
-          <div className="form-control">
+          <div>
             <label htmlFor="email">Email</label>
             <Field type="text" id="email" name="email" />
             <ErrorMessage name="email" component={TextError} />
           </div>
 
-          <div className="form-control">
+          <div>
             <label htmlFor="password">Password</label>
             <Field type="password" id="password" name="password" />
             <ErrorMessage name="password" component={TextError} />

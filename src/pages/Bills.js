@@ -9,7 +9,7 @@ import {
 import * as Yup from 'yup';
 import TextError from '../components/TextError';
 import api, { handleApiError } from '../api';
-import Select from '../components/forms/Select';
+// import Select from '../components/forms/Select';
 
 export default function Bills() {
   const [walletOptions, setWalletOptions] = useState([]);
@@ -111,35 +111,35 @@ export default function Bills() {
         return (
           <Form>
 
-            <div className="form-control">
+            <div>
               <label htmlFor="date">Date</label>
               <Field type="date" id="date" name="date" />
               <ErrorMessage name="date" component={TextError} />
             </div>
 
-            <div className="form-control">
+            <div>
               <label htmlFor="description">Description</label>
               <Field type="text" id="description" name="description" />
               <ErrorMessage name="description" component={TextError} />
             </div>
 
-            <div className="form-control">
+            <div>
               <label htmlFor="value">Value</label>
               <Field type="number" id="value" name="value" />
               <ErrorMessage name="value" component={TextError} />
             </div>
 
-            <Select label="Wallet" name="walletId" options={walletOptions} />
+            {/* <Select label="Wallet" name="walletId" options={walletOptions} />
 
-            <Select label="Category" name="categoryId" options={categoryOptions} />
+            <Select label="Category" name="categoryId" options={categoryOptions} /> */}
 
-            <div className="form-control">
+            <div>
               <label htmlFor="note">Note</label>
               <Field type="text" id="note" name="note" />
               <ErrorMessage name="note" component={TextError} />
             </div>
 
-            <div className="form-control">
+            <div>
               <label htmlFor="isDebt">Is Debt</label>
               <input
                 type="checkbox"
@@ -153,7 +153,7 @@ export default function Bills() {
               <ErrorMessage name="isDebt" component={TextError} />
             </div>
 
-            <div className="form-control">
+            <div>
               <label htmlFor="isPaid">Is Paid</label>
               <input
                 type="checkbox"
@@ -167,7 +167,7 @@ export default function Bills() {
               <ErrorMessage name="isPaid" component={TextError} />
             </div>
 
-            <div className="form-control">
+            <div>
               <label htmlFor="isPeriodic">Is Periodic</label>
               <input
                 type="checkbox"
@@ -180,12 +180,13 @@ export default function Bills() {
               />
             </div>
 
-            {formik.values.isPeriodic
-            && (<Select label="Interval Type" name="periodicity.type" options={intervalTypeOptions} />)}
+            {/* {formik.values.isPeriodic
+            && (<Select label="Interval Type"
+            name="periodicity.type" options={intervalTypeOptions} />)} */}
 
             {formik.values.isPeriodic
             && (
-            <div className="form-control">
+            <div>
               <label htmlFor="interval">Interval</label>
               <Field type="number" id="interval" name="periodicity.interval" />
               <ErrorMessage name="periodicity.interval" component={TextError} />
@@ -194,7 +195,7 @@ export default function Bills() {
 
             {formik.values.isPeriodic
             && (
-            <div className="form-control">
+            <div>
               <label htmlFor="part">Part</label>
               <Field type="number" id="part" name="periodicity.part" />
               <ErrorMessage name="periodicity.part" component={TextError} />
@@ -203,7 +204,7 @@ export default function Bills() {
 
             {formik.values.isPeriodic
           && (
-          <div className="form-control">
+          <div>
             <label htmlFor="endPart">End Part</label>
             <Field type="number" id="endPart" name="periodicity.endPart" />
             <ErrorMessage name="periodicity.endPart" component={TextError} />

@@ -1,7 +1,7 @@
 import React from 'react';
 
 function TextError({ children }) {
-  return <div className="error">{children}</div>;
+  return <div>{children}</div>;
 }
 
 export default TextError;

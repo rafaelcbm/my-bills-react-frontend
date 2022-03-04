@@ -22,9 +22,9 @@ export default function Categories() {
   };
 
   return (
-    <div className="form-control">
-      <div className="form-control">
-        <ul className="categories">
+    <div>
+      <div>
+        <ul>
           {categories.map((category) => (
             <Category
               key={category.id}
@@ -34,7 +34,7 @@ export default function Categories() {
         </ul>
       </div>
 
-      <div className="form-control">
+      <div>
         <input
           type="text"
           value={newCategory}
@@ -45,7 +45,7 @@ export default function Categories() {
         />
       </div>
 
-      <div className="form-control">
+      <div>
         <button type="button" onClick={addCategoryBtnClick}>Add</button>
       </div>
     </div>
