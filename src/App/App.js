@@ -1,6 +1,7 @@
 import React from 'react';
 import { Route, Router, Switch } from 'react-router-dom';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
 
 import Routes from '../routes';
 import history from '../history';
@@ -14,6 +15,7 @@ const theme = createTheme();
 function App() {
   return (
     <ThemeProvider theme={theme}>
+      <CssBaseline />
       <AuthProvider>
         <CategoriesProvider>
           <Router history={history}>

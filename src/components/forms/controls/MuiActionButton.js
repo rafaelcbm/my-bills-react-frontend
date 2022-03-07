@@ -11,13 +11,13 @@ const useStyles = makeStyles(() => {
       margin: theme.spacing(0.5)
     },
     secondary: {
-      backgroundColor: theme.palette.secondary.light,
+      backgroundColor: theme.palette.grey[200],
       '& .MuiButton-label': {
-        color: theme.palette.secondary.main,
+        color: theme.palette.error.main,
       }
     },
     primary: {
-      backgroundColor: theme.palette.primary.light,
+      backgroundColor: theme.palette.grey[200],
       '& .MuiButton-label': {
         color: theme.palette.primary.main,
       }

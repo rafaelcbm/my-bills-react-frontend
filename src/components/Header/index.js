@@ -26,7 +26,7 @@ function Header() {
           </Typography>
 
           <Typography variant="h6">
-            <Link to="/bills-month">Bills-Month</Link>
+            <Link to="/monthly-bills">Monthly Bills</Link>
           </Typography>
 
         </div>

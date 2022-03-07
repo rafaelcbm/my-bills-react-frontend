@@ -12,7 +12,7 @@ import Page404 from './pages/Page404';
 import Bills from './pages/Bills';
 import BillsMonth from './pages/BillsMonth.page';
 import Header from './components/Header';
-import BillsMonth2 from './pages/BillsMonth2.page';
+import MonthlyBills from './pages/MonthlyBills.page';
 
 function CustomRoute({ isPrivate, ...rest }) {
   const { loading, authenticated } = useContext(AuthContext);
@@ -31,7 +31,7 @@ function CustomRoute({ isPrivate, ...rest }) {
         <Header />
       </Grid>
       <Grid item xs={12}>
-        <Container maxWidth="md">
+        <Container maxWidth="lg">
           <Route {...rest} />
         </Container>
       </Grid>
@@ -45,7 +45,7 @@ export default function Routes() {
     <Switch>
       <CustomRoute isPrivate exact path="/" component={Categories} />
       <CustomRoute isPrivate exact path="/categories" component={Categories} />
-      <CustomRoute isPrivate exact path="/bills-month" component={BillsMonth2} />
+      <CustomRoute isPrivate exact path="/monthly-bills" component={MonthlyBills} />
       <CustomRoute isPrivate exact path="/bills" component={Bills} />
       <Route>
         <Page404 />
