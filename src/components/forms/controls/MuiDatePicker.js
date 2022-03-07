@@ -2,6 +2,8 @@ import React from 'react';
 import { DatePicker, LocalizationProvider } from '@mui/lab';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import { TextField } from '@mui/material';
+// import ptBR from 'date-fns/locale/pt-BR';
+import enLocale from 'date-fns/locale/en-US';
 
 export default function MuiDatePicker(props) {
   const {
@@ -19,7 +21,7 @@ export default function MuiDatePicker(props) {
   };
 
   return (
-    <LocalizationProvider dateAdapter={AdapterDateFns}>
+    <LocalizationProvider dateAdapter={AdapterDateFns} locale={enLocale}>
       <DatePicker
         label={label}
         value={value}
