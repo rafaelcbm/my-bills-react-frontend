@@ -113,10 +113,12 @@ export default function MonthlyBills() {
     TblContainer,
     TblHead,
     TblPagination,
-    recordsAfterPagingAndSorting
+    recordsAfterPagingAndSorting,
+    setPage
   } = useTable(records, headCells, filterFn);
 
   const handleSearch = (e) => {
+    setPage(0);
     const { target } = e;
     setFilterFn({
       fn: (items) => {

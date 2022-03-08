@@ -138,6 +138,7 @@ export default function useTable(records, headCells, filterFn) {
     TblContainer,
     TblHead,
     TblPagination,
-    recordsAfterPagingAndSorting
+    recordsAfterPagingAndSorting,
+    setPage
   };
 }
