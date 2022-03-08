@@ -96,9 +96,7 @@ export default function MonthlyBills() {
         return bill;
       });
 
-      console.log('bills', bills);
       setRecords(bills);
-      console.log('records', records);
     } catch (error) {
       handleApiError(error);
       setNotify({

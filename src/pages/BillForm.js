@@ -275,7 +275,7 @@ export default function BillForm(props) {
           <div>
             <Controls.MuiButton
               type="submit"
-              text="Submit"
+              text="Save Bill"
             />
             <Controls.MuiButton
               text="Reset"
