@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
 import { Grid } from '@mui/material';
-import { makeStyles } from '@material-ui/styles';
-import { useTheme } from '@material-ui/core/styles';
 
 import api, { handleApiError } from '../api';
 import { useForm, Form } from '../hooks/useForm';
@@ -97,51 +95,6 @@ export default function BillForm(props) {
       addOrEdit(values, resetForm);
     }
   };
-
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   console.log('values  =', values);
-
-  //   if (validate()) {
-  //     setConfirmDialog({
-  //       isOpen: true,
-  //       title: 'Are you sure to add this record?',
-  //       subTitle: "You can't undo this operation",
-  //       onConfirm: () => { confirmAddBill(values); }
-  //     });
-  //   }
-  // };
-
-  // const confirmAddBill = async (bill) => {
-  //   setConfirmDialog({
-  //     ...confirmDialog,
-  //     isOpen: false
-  //   });
-
-  //   try {
-  //     const newBill = {
-  //       ...bill,
-  //       periodicity: bill.isPeriodic ? {
-  //         type: +bill.type,
-  //         interval: +bill.interval,
-  //         part: +bill.part,
-  //         endPart: +bill.endPart
-  //       } : {}
-  //     };
-
-  //     await api.post('/bills', newBill);
-
-  //     setNotify({
-  //       isOpen: true,
-  //       message: `Bill ${bill.description} Added Successfully`,
-  //       type: 'success'
-  //     });
-  //   } catch (error) {
-  //     handleApiError(error);
-  //   }
-
-  //   resetForm();
-  // };
 
   return (
     <Form onSubmit={handleSubmit}>
