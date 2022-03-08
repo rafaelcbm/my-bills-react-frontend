@@ -10,7 +10,6 @@ import './App/App.css';
 import Categories from './pages/Categories';
 import Page404 from './pages/Page404';
 import Bills from './pages/Bills';
-import BillsMonth from './pages/BillsMonth.page';
 import Header from './components/Header';
 import MonthlyBills from './pages/MonthlyBills.page';
 
