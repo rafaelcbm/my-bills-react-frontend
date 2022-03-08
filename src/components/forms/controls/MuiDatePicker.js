@@ -11,14 +11,9 @@ export default function MuiDatePicker(props) {
   } = props;
 
   // eslint-disable-next-line no-shadow
-  const convertToDefEventPara = (name, value) => {
-    console.log('name ', name);
-    console.log('value ', value);
-
-    return {
-      target: { name, value }
-    };
-  };
+  const convertToDefEventPara = (name, value) => ({
+    target: { name, value }
+  });
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns} locale={enLocale}>

@@ -73,7 +73,6 @@ export default function BillForm(props) {
 
   const loadWallets = async () => {
     const walletsResponse = await api.get('/wallets');
-    console.log('walletsResponse', walletsResponse);
 
     setWalletOptions(
       walletsResponse.data.map((wallet) => ({ key: wallet.name, value: wallet.id }))
@@ -82,7 +81,6 @@ export default function BillForm(props) {
 
   const loadCategories = async () => {
     const categoriesResponse = await api.get('/categories');
-    console.log('categoriesResponse', categoriesResponse);
 
     setCategoryOptions(
       categoriesResponse.data.map((category) => ({ key: category.name, value: category.id }))
@@ -98,7 +96,6 @@ export default function BillForm(props) {
 
   useEffect(() => {
     if (recordForEdit != null) {
-      console.log('recordForEdit', recordForEdit);
       setValues({
         ...recordForEdit
       });

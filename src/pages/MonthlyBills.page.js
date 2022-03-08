@@ -22,7 +22,7 @@ import BillForm from './BillForm';
 import PageHeader from '../components/PageHeader';
 import useTable from '../hooks/useTable';
 import { CategoriesContext } from '../Context/CategoriesContext';
-import { formatCurrency, formatDate } from '../util/format-util';
+import { transformToForm, transformToSend } from '../services/billService';
 
 const useStyles = makeStyles(() => {
   const theme = useTheme();
@@ -90,14 +90,7 @@ export default function MonthlyBills() {
     try {
       const billsResponse = await api.get(`/bills/month/${yearMonth}`);
 
-      const bills = billsResponse.data.map((bill) => {
-        bill.formattedDate = formatDate(bill.date);
-        bill.formattedValue = formatCurrency(bill.value);
-        bill.category = categories.find((c) => c.id === bill.categoryId).name;
-        bill.wallet = wallets.find((w) => w.id === bill.walletId).name;
-        return bill;
-      });
-
+      const bills = billsResponse.data.map((bill) => transformToForm(bill, categories, wallets));
       setRecords(bills);
     } catch (error) {
       handleApiError(error);
@@ -142,15 +135,7 @@ export default function MonthlyBills() {
     setConfirmDialog({ ...confirmDialog, isOpen: false });
 
     try {
-      const newBill = {
-        ...bill,
-        periodicity: bill.isPeriodic ? {
-          type: +bill.type,
-          interval: +bill.interval,
-          part: +bill.part,
-          endPart: +bill.endPart
-        } : {}
-      };
+      const newBill = transformToSend(bill);
 
       await api.post('/bills', newBill);
 
@@ -181,7 +166,8 @@ export default function MonthlyBills() {
   };
 
   const updateBill = (bill) => {
-    console.log('updateBill called with', bill);
+    const newBill = transformToSend(bill);
+    console.log('updateBill called with', newBill);
     setNotify({
       isOpen: true,
       message: `Update Bill ${bill.description} not implemented.`,
@@ -199,7 +185,6 @@ export default function MonthlyBills() {
   };
 
   const deleteBill = async (billId) => {
-    console.log('deleteBill id', billId);
     setConfirmDialog({
       ...confirmDialog,
       isOpen: false

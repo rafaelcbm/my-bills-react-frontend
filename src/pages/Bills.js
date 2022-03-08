@@ -22,7 +22,6 @@ export default function Bills() {
 
   const loadWallets = async () => {
     const walletsResponse = await api.get('/wallets');
-    console.log('walletsResponse', walletsResponse);
 
     setWalletOptions(
       [{ key: 'Select a wallet', value: '' }, ...walletsResponse.data.map((wallet) => ({ key: wallet.name, value: wallet.id }))]
@@ -38,7 +37,6 @@ export default function Bills() {
 
   const loadCategories = async () => {
     const categoriesResponse = await api.get('/categories');
-    console.log('categoriesResponse', categoriesResponse);
 
     setCategoryOptions(
       [{ key: 'Select a category', value: '' }, ...categoriesResponse.data.map((category) => ({ key: category.name, value: category.id }))]
@@ -91,8 +89,6 @@ export default function Bills() {
   };
 
   const onSubmit = async (formData, submitProps) => {
-    console.log('Form data', formData);
-    console.log('submitProps', submitProps);
     await addBill(formData);
     submitProps.setSubmitting(false);
     submitProps.resetForm();
