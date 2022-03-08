@@ -22,6 +22,7 @@ import BillForm from './BillForm';
 import PageHeader from '../components/PageHeader';
 import useTable from '../hooks/useTable';
 import { CategoriesContext } from '../Context/CategoriesContext';
+import { formatCurrency, formatDate } from '../util/format-util';
 
 const useStyles = makeStyles(() => {
   const theme = useTheme();
@@ -90,7 +91,8 @@ export default function MonthlyBills() {
       const billsResponse = await api.get(`/bills/month/${yearMonth}`);
 
       const bills = billsResponse.data.map((bill) => {
-        bill.formattedDate = new Date(Date.parse(bill.date)).toLocaleDateString('pt-BR');
+        bill.formattedDate = formatDate(bill.date);
+        bill.formattedValue = formatCurrency(bill.value);
         bill.category = categories.find((c) => c.id === bill.categoryId).name;
         bill.wallet = wallets.find((w) => w.id === bill.walletId).name;
         return bill;
@@ -259,7 +261,7 @@ export default function MonthlyBills() {
                   <TableCell>{item.wallet}</TableCell>
                   <TableCell>{item.category}</TableCell>
                   <TableCell>{item.description}</TableCell>
-                  <TableCell>{item.value}</TableCell>
+                  <TableCell>{item.formattedValue}</TableCell>
                   <TableCell>
                     <Controls.MuiActionButton
                       color="primary"
