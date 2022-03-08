@@ -7,6 +7,7 @@ export default function Logout() {
 
   return (
     <LogoutIcon
+      style={{ cursor: 'pointer' }}
       fontSize="large"
       onClick={handleLogout}
     />

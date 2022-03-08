@@ -34,7 +34,7 @@ function Header() {
           <Typography variant="h6" style={{ flexGrow: '1' }}>
             <Link className={styles.header_link} to="/monthly-bills">Monthly Bills</Link>
           </Typography>
-          <div style={{ flexGrow: '23', textAlign: 'end', cursor: 'pointer' }}>
+          <div style={{ flexGrow: '23', textAlign: 'end' }}>
             <Logout />
           </div>
         </div>
