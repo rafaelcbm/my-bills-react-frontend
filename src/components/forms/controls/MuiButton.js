@@ -8,9 +8,7 @@ const useStyles = makeStyles(() => {
 
   return {
     root: {
-      margin: theme.spacing(0.5)
-    },
-    label: {
+      margin: theme.spacing(0.5),
       textTransform: 'none'
     }
   };

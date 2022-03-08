@@ -43,7 +43,7 @@ function CustomRoute({ isPrivate, ...rest }) {
 export default function Routes() {
   return (
     <Switch>
-      <CustomRoute isPrivate exact path="/" component={Categories} />
+      <CustomRoute isPrivate exact path="/" component={MonthlyBills} />
       <CustomRoute isPrivate exact path="/categories" component={Categories} />
       <CustomRoute isPrivate exact path="/monthly-bills" component={MonthlyBills} />
       <CustomRoute isPrivate exact path="/bills" component={Bills} />
