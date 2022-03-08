@@ -132,24 +132,10 @@ export default function MonthlyBills() {
 
   const addOrEdit = (bill, resetForm) => {
     if (!bill.id) {
-      setConfirmDialog({
-        isOpen: true,
-        title: 'Are you sure to add this bill?',
-        subTitle: "You can't undo this operation",
-        onConfirm: () => { insertBill(bill, resetForm); }
-      });
+      insertBill(bill, resetForm);
     } else {
       updateBill(bill);
     }
-  };
-
-  const openInPopup = (item) => {
-    setRecordForEdit(item);
-    setOpenPopup(true);
-  };
-
-  const updateBill = (bill) => {
-    console.log('updateBill called with', bill);
   };
 
   const insertBill = async (bill, resetForm) => {
@@ -187,8 +173,15 @@ export default function MonthlyBills() {
         type: 'error'
       });
     }
+  };
 
-    // resetForm();
+  const openInPopup = (item) => {
+    setRecordForEdit(item);
+    setOpenPopup(true);
+  };
+
+  const updateBill = (bill) => {
+    console.log('updateBill called with', bill);
   };
 
   const onDelete = (bill) => {
@@ -200,19 +193,21 @@ export default function MonthlyBills() {
     });
   };
 
-  const deleteBill = (id) => {
-    console.log('deleteBill id', id);
+  const deleteBill = async (billId) => {
+    console.log('deleteBill id', billId);
     setConfirmDialog({
       ...confirmDialog,
       isOpen: false
     });
-    // employeeService.deleteEmployee(id);
-    // setRecords(employeeService.getAllEmployees())
-    // setNotify({
-    //     isOpen: true,
-    //     message: 'Deleted Successfully',
-    //     type: 'error'
-    // })
+
+    const deleteBillResponse = await api.delete(`/bills/${billId}`);
+    await getBills('2022-03');
+
+    setNotify({
+      isOpen: true,
+      message: 'Deleted Successfully',
+      type: 'success'
+    });
   };
 
   return (
