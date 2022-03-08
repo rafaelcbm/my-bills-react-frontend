@@ -13,34 +13,27 @@ const intervalTypeOptions = [
   { key: 'Year', value: '3' }
 ];
 
+const initialFormValues = {
+  description: '',
+  date: new Date(),
+  value: 0,
+  walletId: '',
+  categoryId: '',
+  isDebt: true,
+  isPaid: false,
+  note: '',
+  isPeriodic: false,
+  type: 0,
+  interval: 0,
+  part: 0,
+  endPart: 0
+};
+
 export default function BillForm(props) {
   const { addOrEdit, recordForEdit } = props;
 
   const [walletOptions, setWalletOptions] = useState([]);
   const [categoryOptions, setCategoryOptions] = useState([]);
-
-  useEffect(() => {
-    loadWallets();
-    loadCategories();
-  }, []);
-
-  const loadWallets = async () => {
-    const walletsResponse = await api.get('/wallets');
-    console.log('walletsResponse', walletsResponse);
-
-    setWalletOptions(
-      walletsResponse.data.map((wallet) => ({ key: wallet.name, value: wallet.id }))
-    );
-  };
-
-  const loadCategories = async () => {
-    const categoriesResponse = await api.get('/categories');
-    console.log('categoriesResponse', categoriesResponse);
-
-    setCategoryOptions(
-      categoriesResponse.data.map((category) => ({ key: category.name, value: category.id }))
-    );
-  };
 
   const validate = (fieldValues = values) => {
     const temp = { ...errors };
@@ -69,25 +62,32 @@ export default function BillForm(props) {
     return undefined;
   };
 
-  const initialFormValues = {
-    description: '',
-    date: new Date(),
-    value: 0,
-    walletId: '',
-    categoryId: '',
-    isDebt: true,
-    isPaid: false,
-    note: '',
-    isPeriodic: false,
-    type: 0,
-    interval: 0,
-    part: 0,
-    endPart: 0
-  };
-
   const {
     values, setValues, errors, setErrors, handleInputChange, resetForm
   } = useForm(initialFormValues, validate, true);
+
+  useEffect(() => {
+    loadWallets();
+    loadCategories();
+  }, []);
+
+  const loadWallets = async () => {
+    const walletsResponse = await api.get('/wallets');
+    console.log('walletsResponse', walletsResponse);
+
+    setWalletOptions(
+      walletsResponse.data.map((wallet) => ({ key: wallet.name, value: wallet.id }))
+    );
+  };
+
+  const loadCategories = async () => {
+    const categoriesResponse = await api.get('/categories');
+    console.log('categoriesResponse', categoriesResponse);
+
+    setCategoryOptions(
+      categoriesResponse.data.map((category) => ({ key: category.name, value: category.id }))
+    );
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -95,6 +95,15 @@ export default function BillForm(props) {
       addOrEdit(values, resetForm);
     }
   };
+
+  useEffect(() => {
+    if (recordForEdit != null) {
+      console.log('recordForEdit', recordForEdit);
+      setValues({
+        ...recordForEdit
+      });
+    }
+  }, [recordForEdit]);
 
   return (
     <Form onSubmit={handleSubmit}>

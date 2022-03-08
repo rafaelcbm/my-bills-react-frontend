@@ -182,6 +182,11 @@ export default function MonthlyBills() {
 
   const updateBill = (bill) => {
     console.log('updateBill called with', bill);
+    setNotify({
+      isOpen: true,
+      message: `Update Bill ${bill.description} not implemented.`,
+      type: 'warning'
+    });
   };
 
   const onDelete = (bill) => {
