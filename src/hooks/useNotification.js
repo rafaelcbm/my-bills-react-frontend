@@ -27,7 +27,7 @@ export function useNotification() {
     });
   };
 
-  const closeNotification = (message) => {
+  const closeNotification = () => {
     setNotify({
       ...notify,
       isOpen: false
@@ -35,6 +35,6 @@ export function useNotification() {
   };
 
   return {
-    notify, setNotify, showSuccessMessage, showWarningMessage, showErrorMessage, closeNotification
+    notify, showSuccessMessage, showWarningMessage, showErrorMessage, closeNotification
   };
 }
