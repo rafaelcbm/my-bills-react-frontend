@@ -42,7 +42,7 @@ const useStyles = makeStyles(() => {
 });
 
 export default function ConfirmDialog(props) {
-  const { confirmDialog, setConfirmDialog } = props;
+  const { confirmDialog, closeConfirmDialog } = props;
   const classes = useStyles();
 
   return (
@@ -65,7 +65,7 @@ export default function ConfirmDialog(props) {
           text="No"
           color="error"
           variant="outlined"
-          onClick={() => setConfirmDialog({ ...confirmDialog, isOpen: false })}
+          onClick={closeConfirmDialog}
         />
         <Controls.MuiButton
           text="Yes"

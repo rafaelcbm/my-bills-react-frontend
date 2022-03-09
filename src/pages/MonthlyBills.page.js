@@ -24,6 +24,7 @@ import useTable from '../hooks/useTable';
 import { CategoriesContext } from '../Context/CategoriesContext';
 import { transformToForm, transformToSend } from '../services/billService';
 import { useNotification } from '../hooks/useNotification';
+import { useConfirmDialog } from '../hooks/useConfirmDialog';
 
 const useStyles = makeStyles(() => {
   const theme = useTheme();
@@ -61,7 +62,6 @@ export default function MonthlyBills() {
   const classes = useStyles();
 
   const [recordForEdit, setRecordForEdit] = useState(null);
-  const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, title: '', subTitle: '' });
   const [openPopup, setOpenPopup] = useState(false);
   const [filterFn, setFilterFn] = useState({ fn: (items) => items });
   const [records, setRecords] = useState([]);
@@ -71,6 +71,10 @@ export default function MonthlyBills() {
   const {
     notify, showSuccessMessage, showWarningMessage, showErrorMessage, closeNotification
   } = useNotification();
+
+  const {
+    confirmDialog, showConfirmDialog, closeConfirmDialog
+  } = useConfirmDialog();
 
   useEffect(() => {
     getCategories(setCategories);
@@ -132,8 +136,6 @@ export default function MonthlyBills() {
   };
 
   const insertBill = async (bill, resetForm) => {
-    setConfirmDialog({ ...confirmDialog, isOpen: false });
-
     try {
       const newBill = transformToSend(bill);
 
@@ -164,19 +166,15 @@ export default function MonthlyBills() {
   };
 
   const onDelete = (bill) => {
-    setConfirmDialog({
-      isOpen: true,
-      title: 'Are you sure to delete this bill?',
-      subTitle: "You can't undo this operation",
-      onConfirm: () => { deleteBill(bill); }
-    });
+    showConfirmDialog(
+      'Are you sure to delete this bill?',
+      "You can't undo this operation",
+      () => { deleteBill(bill); }
+    );
   };
 
   const deleteBill = async (bill) => {
-    setConfirmDialog({
-      ...confirmDialog,
-      isOpen: false
-    });
+    closeConfirmDialog();
 
     const deleteBillResponse = await api.delete(`/bills/${bill.id}`);
     await getBills('2022-03');
@@ -275,7 +273,7 @@ export default function MonthlyBills() {
       />
       <ConfirmDialog
         confirmDialog={confirmDialog}
-        setConfirmDialog={setConfirmDialog}
+        closeConfirmDialog={closeConfirmDialog}
       />
     </>
 
