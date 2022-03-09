@@ -1,5 +1,3 @@
-/* eslint-disable import/prefer-default-export */
-
 export function formatCurrency(value) {
   const formatter = new Intl.NumberFormat('pt-BR', {
     style: 'currency',

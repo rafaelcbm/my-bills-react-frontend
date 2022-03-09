@@ -1,5 +1,4 @@
-/* eslint-disable import/prefer-default-export */
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 export function useNotification() {
   const [notify, setNotify] = useState({ isOpen: false, message: '', type: '' });

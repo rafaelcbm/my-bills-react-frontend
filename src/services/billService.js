@@ -1,5 +1,3 @@
-/* eslint-disable import/prefer-default-export */
-
 import { formatCurrency, formatDate } from '../util/format-util';
 
 export function transformToForm(bill, categories, wallets) {
