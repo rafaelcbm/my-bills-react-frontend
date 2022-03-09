@@ -27,6 +27,7 @@ export function transformToForm(bill, categories, wallets) {
 export function transformToSend(bill) {
   const newBill = {
     ...bill,
+    value: +bill.value,
     periodicity: bill.isPeriodic ? {
       type: +bill.type,
       interval: +bill.interval,

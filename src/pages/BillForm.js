@@ -16,7 +16,7 @@ const intervalTypeOptions = [
 const initialFormValues = {
   description: '',
   date: new Date(),
-  value: 0,
+  value: '',
   walletId: '',
   categoryId: '',
   isDebt: true,
@@ -154,6 +154,7 @@ export default function BillForm(props) {
             value={values.value}
             onChange={handleInputChange}
             error={errors.value}
+            currency
           />
         </Grid>
 
