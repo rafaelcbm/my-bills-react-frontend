@@ -25,7 +25,7 @@ export default function MuiDatePicker(props) {
         renderInput={(params) => (
           <TextField
             fullWidth
-            variant="standard"
+            variant="outlined"
             {...params}
             {...(error && { error: true, helperText: error })}
           />
