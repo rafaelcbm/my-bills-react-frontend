@@ -13,17 +13,14 @@ const useStyles = makeStyles(() => {
 });
 
 export default function Notification(props) {
-  const { notify, setNotify } = props;
+  const { notify, closeNotification } = props;
   const classes = useStyles();
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
     }
-    setNotify({
-      ...notify,
-      isOpen: false
-    });
+    closeNotification();
   };
 
   return (

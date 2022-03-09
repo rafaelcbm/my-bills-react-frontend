@@ -23,6 +23,7 @@ import PageHeader from '../components/PageHeader';
 import useTable from '../hooks/useTable';
 import { CategoriesContext } from '../Context/CategoriesContext';
 import { transformToForm, transformToSend } from '../services/billService';
+import { useNotification } from '../hooks/useNotification';
 
 const useStyles = makeStyles(() => {
   const theme = useTheme();
@@ -60,13 +61,16 @@ export default function MonthlyBills() {
   const classes = useStyles();
 
   const [recordForEdit, setRecordForEdit] = useState(null);
-  const [notify, setNotify] = useState({ isOpen: false, message: '', type: '' });
   const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, title: '', subTitle: '' });
   const [openPopup, setOpenPopup] = useState(false);
   const [filterFn, setFilterFn] = useState({ fn: (items) => items });
   const [records, setRecords] = useState([]);
   // TODO: move to a Context
   const [wallets, setWallets] = useState([]);
+
+  const {
+    notify, showSuccessMessage, showWarningMessage, showErrorMessage, closeNotification
+  } = useNotification();
 
   useEffect(() => {
     getCategories(setCategories);
@@ -94,11 +98,7 @@ export default function MonthlyBills() {
       setRecords(bills);
     } catch (error) {
       handleApiError(error);
-      setNotify({
-        isOpen: true,
-        message: 'Error on searching bills.',
-        type: 'error'
-      });
+      showErrorMessage('Error on searching bills.');
     }
   };
 
@@ -139,11 +139,7 @@ export default function MonthlyBills() {
 
       await api.post('/bills', newBill);
 
-      setNotify({
-        isOpen: true,
-        message: `Bill ${bill.description} Added Successfully`,
-        type: 'success'
-      });
+      showSuccessMessage(`Bill ${bill.description} Added Successfully`);
 
       resetForm();
       setRecordForEdit(null);
@@ -152,11 +148,7 @@ export default function MonthlyBills() {
       getBills('2022-03');
     } catch (error) {
       handleApiError(error);
-      setNotify({
-        isOpen: true,
-        message: `Error on adding Bill ${bill.description}.`,
-        type: 'error'
-      });
+      showErrorMessage(`Error on adding Bill ${bill.description}.`);
     }
   };
 
@@ -168,11 +160,7 @@ export default function MonthlyBills() {
   const updateBill = (bill) => {
     const newBill = transformToSend(bill);
     console.log('updateBill called with', newBill);
-    setNotify({
-      isOpen: true,
-      message: `Update Bill ${bill.description} not implemented.`,
-      type: 'warning'
-    });
+    showWarningMessage(`Update Bill ${bill.description} not implemented.`);
   };
 
   const onDelete = (bill) => {
@@ -180,24 +168,20 @@ export default function MonthlyBills() {
       isOpen: true,
       title: 'Are you sure to delete this bill?',
       subTitle: "You can't undo this operation",
-      onConfirm: () => { deleteBill(bill.id); }
+      onConfirm: () => { deleteBill(bill); }
     });
   };
 
-  const deleteBill = async (billId) => {
+  const deleteBill = async (bill) => {
     setConfirmDialog({
       ...confirmDialog,
       isOpen: false
     });
 
-    const deleteBillResponse = await api.delete(`/bills/${billId}`);
+    const deleteBillResponse = await api.delete(`/bills/${bill.id}`);
     await getBills('2022-03');
 
-    setNotify({
-      isOpen: true,
-      message: 'Deleted Successfully',
-      type: 'success'
-    });
+    showSuccessMessage(`Bill ${bill.description} Deleted Successfully`);
   };
 
   return (
@@ -287,7 +271,7 @@ export default function MonthlyBills() {
 
       <Notification
         notify={notify}
-        setNotify={setNotify}
+        closeNotification={closeNotification}
       />
       <ConfirmDialog
         confirmDialog={confirmDialog}
