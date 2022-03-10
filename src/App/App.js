@@ -2,6 +2,7 @@ import React from 'react';
 import { Route, Router, Switch } from 'react-router-dom';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
+import { QueryClientProvider, QueryClient } from 'react-query';
 
 import Routes from '../routes';
 import history from '../history';
@@ -11,21 +12,24 @@ import { CategoriesProvider } from '../Context/CategoriesContext';
 import Login from '../pages/Login';
 
 const theme = createTheme();
+const queryClient = new QueryClient();
 
 function App() {
   return (
     <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <AuthProvider>
-        <CategoriesProvider>
-          <Router history={history}>
-            <Switch>
-              <Route exact path="/login" component={Login} />
-              <Routes />
-            </Switch>
-          </Router>
-        </CategoriesProvider>
-      </AuthProvider>
+      <QueryClientProvider client={queryClient}>
+        <CssBaseline />
+        <AuthProvider>
+          <CategoriesProvider>
+            <Router history={history}>
+              <Switch>
+                <Route exact path="/login" component={Login} />
+                <Routes />
+              </Switch>
+            </Router>
+          </CategoriesProvider>
+        </AuthProvider>
+      </QueryClientProvider>
     </ThemeProvider>
   );
 }
