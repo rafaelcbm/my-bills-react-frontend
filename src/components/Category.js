@@ -1,5 +1,6 @@
-import React, { useContext, useReducer, useState } from 'react';
-import { CategoriesContext } from '../Context/CategoriesContext';
+import React, { useReducer, useState } from 'react';
+
+import useCategories from '../hooks/useCategories';
 
 const initialState = {
   enableEdit: false,
@@ -40,27 +41,25 @@ function reducer(state, action) {
   }
 }
 
-export default function Category({ category }) {
+export default function Category({ category, refetchCategories }) {
   const [categoryName, setCategoryName] = useState('');
   const [fieldState, dispatchFieldUpdate] = useReducer(reducer, initialState);
 
-  const {
-    updateCategory, deleteCategory, getCategories, setCategories
-  } = useContext(CategoriesContext);
+  const { updateCategory, deleteCategory } = useCategories();
 
   async function onSaveBtnClick() {
     dispatchFieldUpdate('save');
     setCategoryName('');
 
     await updateCategory(categoryName, category.id);
-    await getCategories(setCategories);
+    refetchCategories();
   }
 
   async function onDeleteBtnClick() {
     dispatchFieldUpdate('delete');
 
     await deleteCategory(category.id);
-    await getCategories(setCategories);
+    refetchCategories();
   }
 
   return (

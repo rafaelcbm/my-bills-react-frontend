@@ -1,23 +1,30 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 
 import { CategoriesContext } from '../Context/CategoriesContext';
-
 import Category from '../components/Category';
+import useCategories from '../hooks/useCategories';
 
-export default function Categories() {
+export function Categories() {
+  console.log('Categories - COMPONENT');
   const [newCategory, setNewCategory] = useState('');
 
-  useEffect(() => {
-    getCategories(setCategories);
-  }, []);
-
   const {
-    categories, getCategories, setCategories, addCategory
+    categories, setCategories
   } = useContext(CategoriesContext);
 
-  const addCategoryBtnClick = async () => {
-    await addCategory(newCategory);
-    await getCategories(setCategories);
+  const { addCategory, queryCategories } = useCategories();
+
+  const onSuccessQueryCategories = (data) => setCategories(data?.data);
+
+  const onErrorQueryCategories = console.log;
+
+  const {
+    isLoading, data, isError, error, refetch
+  } = queryCategories(onSuccessQueryCategories, onErrorQueryCategories);
+
+  const addCategoryBtnClick = () => {
+    addCategory(newCategory);
+    refetch();
     setNewCategory('');
   };
 
@@ -29,6 +36,7 @@ export default function Categories() {
             <Category
               key={category.id}
               category={category}
+              refetchCategories={refetch}
             />
           ))}
         </ul>
@@ -51,3 +59,5 @@ export default function Categories() {
     </div>
   );
 }
+
+export default Categories;

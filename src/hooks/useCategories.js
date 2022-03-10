@@ -1,6 +1,16 @@
+import { useQuery } from 'react-query';
+
 import api, { handleApiError } from '../api';
 
+const fetchCategories = () => api.get('/categories');
+
 export default function useCategories() {
+  const queryCategories = (onSuccess, onError) => useQuery('categories', fetchCategories, {
+    refetchOnWindowFocus: false,
+    onSuccess,
+    onError
+  });
+
   async function getCategories(updateDataCallback) {
     try {
       const { data } = await api.get('/categories');
@@ -41,6 +51,6 @@ export default function useCategories() {
   };
 
   return {
-    getCategories, addCategory, updateCategory, deleteCategory
+    getCategories, addCategory, updateCategory, deleteCategory, queryCategories
   };
 }

@@ -6,13 +6,10 @@ const CategoriesContext = createContext();
 function CategoriesProvider({ children }) {
   const [categories, setCategories] = useState([]);
 
-  const {
-    getCategories, addCategory, updateCategory, deleteCategory
-  } = useCategories();
-
   return (
     <CategoriesContext.Provider value={{
-      categories, setCategories, getCategories, addCategory, updateCategory, deleteCategory
+      categories,
+      setCategories
     }}
     >
       {children}
