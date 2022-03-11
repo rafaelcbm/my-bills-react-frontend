@@ -1,10 +1,10 @@
 import axios from 'axios';
 
-export default axios.create({
-  baseURL: 'http://localhost:5050/api',
-});
+// export default axios.create({
+//   baseURL: 'http://localhost:5050/api',
+// });
 
-export function handleApiError(error) {
+function handleApiError(error) {
   if (error.response) {
     // The request was made and the server responded with a status code
     // that falls out of the range of 2xx
@@ -25,3 +25,12 @@ export function handleApiError(error) {
     console.log('Error', error);
   }
 }
+
+export const httpClient = axios.create({ baseURL: 'http://localhost:5050/api' });
+
+export const request = ({ ...options }) => {
+  const onSuccess = (response) => response;
+  const onError = handleApiError;
+
+  return httpClient(options).then(onSuccess).catch(onError);
+};

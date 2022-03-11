@@ -34,7 +34,6 @@ export function Categories() {
             <Category
               key={category.id}
               category={category}
-              refetchCategories={refetch}
             />
           ))}
         </ul>

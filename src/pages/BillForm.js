@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 
 import { Grid } from '@mui/material';
 
-import api, { handleApiError } from '../api';
 import { useForm, Form } from '../hooks/useForm';
 import Controls from '../components/forms/controls/Controls';
+import { CategoriesContext } from '../Context/CategoriesContext';
+import useWallets from '../hooks/useWallets';
 
 const intervalTypeOptions = [
   { key: 'Day', value: '0' },
@@ -34,6 +35,9 @@ export default function BillForm(props) {
 
   const [walletOptions, setWalletOptions] = useState([]);
   const [categoryOptions, setCategoryOptions] = useState([]);
+
+  const { categories } = useContext(CategoriesContext);
+  const { queryWallets } = useWallets();
 
   const validate = (fieldValues = values) => {
     const temp = { ...errors };
@@ -67,32 +71,10 @@ export default function BillForm(props) {
   } = useForm(initialFormValues, validate, true);
 
   useEffect(() => {
-    loadWallets();
-    loadCategories();
-  }, []);
-
-  const loadWallets = async () => {
-    const walletsResponse = await api.get('/wallets');
-
-    setWalletOptions(
-      walletsResponse.data.map((wallet) => ({ key: wallet.name, value: wallet.id }))
-    );
-  };
-
-  const loadCategories = async () => {
-    const categoriesResponse = await api.get('/categories');
-
-    setCategoryOptions(
-      categoriesResponse.data.map((category) => ({ key: category.name, value: category.id }))
-    );
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (validate()) {
-      addOrEdit(values, resetForm);
+    if (categories) {
+      loadCategories();
     }
-  };
+  }, [categories]);
 
   useEffect(() => {
     if (recordForEdit != null) {
@@ -101,6 +83,23 @@ export default function BillForm(props) {
       });
     }
   }, [recordForEdit]);
+
+  const onSuccessQueryWallets = (data) => {
+    setWalletOptions(data.data.map((wallet) => ({ id: wallet.id, name: wallet.name })));
+  };
+  const onErrorQueryWallets = console.log;
+  queryWallets(onSuccessQueryWallets, onErrorQueryWallets);
+
+  const loadCategories = () => {
+    setCategoryOptions(categories.map((category) => ({ key: category.name, value: category.id })));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (validate()) {
+      addOrEdit(values, resetForm);
+    }
+  };
 
   return (
     <Form onSubmit={handleSubmit}>

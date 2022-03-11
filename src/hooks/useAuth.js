@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import api, { handleApiError } from '../api';
+import { httpClient, request } from '../http/api';
 
 import history from '../history';
 
@@ -11,7 +11,7 @@ export default function useAuth() {
     const token = localStorage.getItem('token');
 
     if (token) {
-      api.defaults.headers['x-access-token'] = `${JSON.parse(token)}`;
+      httpClient.defaults.headers['x-access-token'] = `${JSON.parse(token)}`;
       setAuthenticated(true);
     }
 
@@ -19,24 +19,22 @@ export default function useAuth() {
   }, []);
 
   async function handleLogin(email, password) {
-    try {
-      const { data: { accessToken } } = await api.post('/login', {
-        email, password,
-      });
+    const { data: { accessToken } } = await request({
+      method: 'POST',
+      url: '/login',
+      data: { email, password }
+    });
 
-      localStorage.setItem('token', JSON.stringify(accessToken));
-      api.defaults.headers['x-access-token'] = `${accessToken}`;
-      setAuthenticated(true);
-      history.push('/categories');
-    } catch (error) {
-      handleApiError(error);
-    }
+    localStorage.setItem('token', JSON.stringify(accessToken));
+    httpClient.defaults.headers['x-access-token'] = `${accessToken}`;
+    setAuthenticated(true);
+    history.push('/categories');
   }
 
   function handleLogout() {
     setAuthenticated(false);
     localStorage.removeItem('token');
-    api.defaults.headers['x-access-token'] = undefined;
+    httpClient.defaults.headers['x-access-token'] = undefined;
     history.push('/login');
   }
 

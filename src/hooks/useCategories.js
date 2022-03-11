@@ -1,8 +1,8 @@
-import { useQuery } from 'react-query';
+import { useQuery, useMutation, useQueryClient } from 'react-query';
 
-import api, { handleApiError } from '../api';
+import { request } from '../http/api';
 
-const fetchCategories = () => api.get('/categories');
+const fetchCategories = () => request({ url: '/categories', method: 'GET' });
 
 export default function useCategories() {
   const queryCategories = (onSuccess, onError) => useQuery('categories', fetchCategories, {
@@ -11,33 +11,58 @@ export default function useCategories() {
     onError
   });
 
-  const addCategory = async (categoryName) => {
-    try {
-      await api.post('/categories', {
-        name: categoryName,
-        root: null,
-        ancestors: []
-      });
-    } catch (error) {
-      handleApiError(error);
-    }
-  };
+  const queryClient = useQueryClient();
 
-  const updateCategory = async (categoryName, categoryId) => {
-    try {
-      await api.put(`/categories/${categoryId}`, { name: categoryName });
-    } catch (error) {
-      handleApiError(error);
+  const addCategoryRequest = (categoryName) => request({
+    url: '/categories',
+    method: 'post',
+    data: {
+      name: categoryName,
+      root: null,
+      ancestors: []
     }
-  };
+  });
 
-  const deleteCategory = async (categoryId) => {
-    try {
-      await api.delete(`/categories/${categoryId}`);
-    } catch (error) {
-      handleApiError(error);
+  const mutation = useMutation(addCategoryRequest, {
+    onSuccess: (data) => {
+      console.log('mutation - onSuccess: data: ', data);
+      queryClient.setQueryData('categories', (oldQueryData) => ({
+        ...oldQueryData,
+        data: [...oldQueryData.data, data.data]
+      }));
     }
-  };
+  });
+
+  const addCategory = (newCategoryName) => mutation.mutate(newCategoryName);
+
+  const updateCategoryRequest = ({ categoryName, categoryId }) => request({
+    url: `/categories/${categoryId}`,
+    method: 'put',
+    data: { name: categoryName }
+  });
+
+  const updateCategoryMutation = useMutation(updateCategoryRequest, {
+    onSuccess: (data) => {
+      queryClient.refetchQueries(['categories'], { active: true });
+    }
+  });
+
+  const updateCategory = (categoryName, categoryId) => updateCategoryMutation.mutate(
+    { categoryName, categoryId }
+  );
+
+  const deleteCategoryRequest = (categoryId) => request({
+    url: `/categories/${categoryId}`,
+    method: 'delete'
+  });
+
+  const deleteCategoryMutation = useMutation(deleteCategoryRequest, {
+    onSuccess: (data) => {
+      queryClient.refetchQueries(['categories'], { active: true });
+    }
+  });
+
+  const deleteCategory = (categoryId) => deleteCategoryMutation.mutate(categoryId);
 
   return {
     addCategory, updateCategory, deleteCategory, queryCategories

@@ -13,7 +13,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { makeStyles } from '@material-ui/styles';
 import { useTheme } from '@material-ui/core/styles';
 
-import api, { handleApiError } from '../api';
+import { request } from '../http/api';
 import Controls from '../components/forms/controls/Controls';
 import Notification from '../components/forms/Notification';
 import ConfirmDialog from '../components/forms/ConfirmDialog';
@@ -93,15 +93,10 @@ export default function MonthlyBills() {
   }, [categories, wallets]);
 
   const getBills = async (yearMonth) => {
-    try {
-      const billsResponse = await api.get(`/bills/month/${yearMonth}`);
+    const billsResponse = await request({ url: `/bills/month/${yearMonth}` });
 
-      const bills = billsResponse.data.map((bill) => transformToForm(bill, categories, wallets));
-      setRecords(bills);
-    } catch (error) {
-      handleApiError(error);
-      showErrorMessage('Error on searching bills.');
-    }
+    const bills = billsResponse.data.map((bill) => transformToForm(bill, categories, wallets));
+    setRecords(bills);
   };
 
   const {
@@ -134,22 +129,17 @@ export default function MonthlyBills() {
   };
 
   const insertBill = async (bill, resetForm) => {
-    try {
-      const newBill = transformToSend(bill);
+    const newBill = transformToSend(bill);
 
-      await api.post('/bills', newBill);
+    await request({ url: '/bills', method: 'POST', data: newBill });
 
-      showSuccessMessage(`Bill ${bill.description} Added Successfully`);
+    showSuccessMessage(`Bill ${bill.description} Added Successfully`);
 
-      resetForm();
-      setRecordForEdit(null);
-      setOpenPopup(false);
+    resetForm();
+    setRecordForEdit(null);
+    setOpenPopup(false);
 
-      getBills('2022-03');
-    } catch (error) {
-      handleApiError(error);
-      showErrorMessage(`Error on adding Bill ${bill.description}.`);
-    }
+    getBills('2022-03');
   };
 
   const openInPopup = (item) => {
@@ -174,7 +164,7 @@ export default function MonthlyBills() {
   const deleteBill = async (bill) => {
     closeConfirmDialog();
 
-    const deleteBillResponse = await api.delete(`/bills/${bill.id}`);
+    const deleteBillResponse = await request({ url: `/bills/${bill.id}`, method: 'DELETE' });
     await getBills('2022-03');
 
     showSuccessMessage(`Bill ${bill.description} Deleted Successfully`);

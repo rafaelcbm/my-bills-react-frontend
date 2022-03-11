@@ -41,25 +41,21 @@ function reducer(state, action) {
   }
 }
 
-export default function Category({ category, refetchCategories }) {
+export default function Category({ category }) {
   const [categoryName, setCategoryName] = useState('');
   const [fieldState, dispatchFieldUpdate] = useReducer(reducer, initialState);
 
   const { updateCategory, deleteCategory } = useCategories();
 
-  async function onSaveBtnClick() {
+  function onSaveBtnClick() {
     dispatchFieldUpdate('save');
     setCategoryName('');
-
-    await updateCategory(categoryName, category.id);
-    refetchCategories();
+    updateCategory(categoryName, category.id);
   }
 
-  async function onDeleteBtnClick() {
+  function onDeleteBtnClick() {
     dispatchFieldUpdate('delete');
-
-    await deleteCategory(category.id);
-    refetchCategories();
+    deleteCategory(category.id);
   }
 
   return (

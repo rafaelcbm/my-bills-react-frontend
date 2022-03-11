@@ -1,8 +1,8 @@
 import { useQuery } from 'react-query';
 
-import api from '../api';
+import { request } from '../http/api';
 
-const fetchWallets = () => api.get('/wallets');
+const fetchWallets = () => request({ method: 'GET', url: '/wallets' });
 
 export default function useWallets() {
   const queryWallets = (onSuccess, onError) => useQuery('wallets', fetchWallets, {
