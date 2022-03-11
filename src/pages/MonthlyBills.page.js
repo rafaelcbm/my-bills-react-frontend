@@ -26,6 +26,7 @@ import { transformToForm, transformToSend } from '../services/billService';
 import { useNotification } from '../hooks/useNotification';
 import { useConfirmDialog } from '../hooks/useConfirmDialog';
 import useCategories from '../hooks/useCategories';
+import useWallets from '../hooks/useWallets';
 
 const useStyles = makeStyles(() => {
   const theme = useTheme();
@@ -58,6 +59,7 @@ const headCells = [
 export default function MonthlyBills() {
   const { categories, setCategories } = useContext(CategoriesContext);
   const { queryCategories } = useCategories();
+  const { queryWallets } = useWallets();
 
   const classes = useStyles();
 
@@ -75,27 +77,20 @@ export default function MonthlyBills() {
   const { confirmDialog, showConfirmDialog, closeConfirmDialog } = useConfirmDialog();
 
   const onSuccessQueryCategories = (data) => setCategories(data?.data);
-
   const onErrorQueryCategories = console.log;
-
   queryCategories(onSuccessQueryCategories, onErrorQueryCategories);
 
-  useEffect(() => {
-    getWallets();
-  }, []);
+  const onSuccessQueryWallets = (data) => {
+    setWallets(data.data.map((wallet) => ({ id: wallet.id, name: wallet.name })));
+  };
+  const onErrorQueryWallets = console.log;
+  queryWallets(onSuccessQueryWallets, onErrorQueryWallets);
 
   useEffect(() => {
     if (categories && categories.length > 0 && wallets && wallets.length > 0) {
       getBills('2022-03');
     }
   }, [categories, wallets]);
-
-  const getWallets = async () => {
-    const walletsResponse = await api.get('/wallets');
-    setWallets(
-      walletsResponse.data.map((wallet) => ({ id: wallet.id, name: wallet.name }))
-    );
-  };
 
   const getBills = async (yearMonth) => {
     try {
