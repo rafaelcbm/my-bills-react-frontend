@@ -25,6 +25,7 @@ import { CategoriesContext } from '../Context/CategoriesContext';
 import { transformToForm, transformToSend } from '../services/billService';
 import { useNotification } from '../hooks/useNotification';
 import { useConfirmDialog } from '../hooks/useConfirmDialog';
+import useCategories from '../hooks/useCategories';
 
 const useStyles = makeStyles(() => {
   const theme = useTheme();
@@ -55,9 +56,8 @@ const headCells = [
 ];
 
 export default function MonthlyBills() {
-  const {
-    categories, getCategories, setCategories
-  } = useContext(CategoriesContext);
+  const { categories, setCategories } = useContext(CategoriesContext);
+  const { queryCategories } = useCategories();
 
   const classes = useStyles();
 
@@ -72,12 +72,15 @@ export default function MonthlyBills() {
     notify, showSuccessMessage, showWarningMessage, showErrorMessage, closeNotification
   } = useNotification();
 
-  const {
-    confirmDialog, showConfirmDialog, closeConfirmDialog
-  } = useConfirmDialog();
+  const { confirmDialog, showConfirmDialog, closeConfirmDialog } = useConfirmDialog();
+
+  const onSuccessQueryCategories = (data) => setCategories(data?.data);
+
+  const onErrorQueryCategories = console.log;
+
+  queryCategories(onSuccessQueryCategories, onErrorQueryCategories);
 
   useEffect(() => {
-    getCategories(setCategories);
     getWallets();
   }, []);
 

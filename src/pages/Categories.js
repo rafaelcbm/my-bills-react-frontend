@@ -8,9 +8,7 @@ export function Categories() {
   console.log('Categories - COMPONENT');
   const [newCategory, setNewCategory] = useState('');
 
-  const {
-    categories, setCategories
-  } = useContext(CategoriesContext);
+  const { categories, setCategories } = useContext(CategoriesContext);
 
   const { addCategory, queryCategories } = useCategories();
 

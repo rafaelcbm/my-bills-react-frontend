@@ -11,17 +11,6 @@ export default function useCategories() {
     onError
   });
 
-  async function getCategories(updateDataCallback) {
-    try {
-      const { data } = await api.get('/categories');
-      if (updateDataCallback && data) {
-        updateDataCallback(data);
-      }
-    } catch (error) {
-      handleApiError(error);
-    }
-  }
-
   const addCategory = async (categoryName) => {
     try {
       await api.post('/categories', {
@@ -51,6 +40,6 @@ export default function useCategories() {
   };
 
   return {
-    getCategories, addCategory, updateCategory, deleteCategory, queryCategories
+    addCategory, updateCategory, deleteCategory, queryCategories
   };
 }
