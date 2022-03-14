@@ -85,7 +85,7 @@ export default function BillForm(props) {
   }, [recordForEdit]);
 
   const onSuccessQueryWallets = (data) => {
-    setWalletOptions(data.data.map((wallet) => ({ id: wallet.id, name: wallet.name })));
+    setWalletOptions(data.data.map((wallet) => ({ key: wallet.name, value: wallet.id })));
   };
   const onErrorQueryWallets = console.log;
   queryWallets(onSuccessQueryWallets, onErrorQueryWallets);
