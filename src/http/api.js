@@ -1,8 +1,13 @@
 import axios from 'axios';
 
-// export default axios.create({
-//   baseURL: 'http://localhost:5050/api',
-// });
+export const httpClient = axios.create({ baseURL: 'http://localhost:5050/api' });
+
+export const request = ({ ...options }) => {
+  const onSuccess = (response) => response;
+  const onError = handleApiError;
+
+  return httpClient(options).then(onSuccess).catch(onError);
+};
 
 function handleApiError(error) {
   if (error.response) {
@@ -25,12 +30,3 @@ function handleApiError(error) {
     console.log('Error', error);
   }
 }
-
-export const httpClient = axios.create({ baseURL: 'http://localhost:5050/api' });
-
-export const request = ({ ...options }) => {
-  const onSuccess = (response) => response;
-  const onError = handleApiError;
-
-  return httpClient(options).then(onSuccess).catch(onError);
-};
