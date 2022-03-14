@@ -25,7 +25,6 @@ export default function useCategories() {
 
   const mutation = useMutation(addCategoryRequest, {
     onSuccess: (data) => {
-      console.log('mutation - onSuccess: data: ', data);
       queryClient.setQueryData('categories', (oldQueryData) => ({
         ...oldQueryData,
         data: [...oldQueryData.data, data.data]
@@ -43,7 +42,7 @@ export default function useCategories() {
 
   const updateCategoryMutation = useMutation(updateCategoryRequest, {
     onSuccess: (data) => {
-      queryClient.refetchQueries(['categories'], { active: true });
+      queryClient.invalidateQueries('categories');
     }
   });
 
@@ -58,7 +57,7 @@ export default function useCategories() {
 
   const deleteCategoryMutation = useMutation(deleteCategoryRequest, {
     onSuccess: (data) => {
-      queryClient.refetchQueries(['categories'], { active: true });
+      queryClient.invalidateQueries('categories');
     }
   });
 
