@@ -1,11 +1,36 @@
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 
-import { request } from '../http/api';
+import {
+  HTTP_DELETE, HTTP_POST, HTTP_PUT, request
+} from '../http/api';
+import { QUERY_CATEGORIES } from '../http/query-names';
+import { RESOURCE_CATEGORIES } from '../http/resources-names';
 
-const fetchCategories = () => request({ url: '/categories', method: 'GET' });
+const getCategoriesRequest = () => request({ url: RESOURCE_CATEGORIES, method: 'GET' });
+
+const addCategoryRequest = (categoryName) => request({
+  url: RESOURCE_CATEGORIES,
+  method: HTTP_POST,
+  data: {
+    name: categoryName,
+    root: null,
+    ancestors: []
+  }
+});
+
+const updateCategoryRequest = ({ categoryName, categoryId }) => request({
+  url: `${RESOURCE_CATEGORIES}/${categoryId}`,
+  method: HTTP_PUT,
+  data: { name: categoryName }
+});
+
+const deleteCategoryRequest = (categoryId) => request({
+  url: `${RESOURCE_CATEGORIES}/${categoryId}`,
+  method: HTTP_DELETE
+});
 
 export default function useCategories() {
-  const queryCategories = (onSuccess, onError) => useQuery('categories', fetchCategories, {
+  const queryCategories = (onSuccess, onError) => useQuery(QUERY_CATEGORIES, getCategoriesRequest, {
     refetchOnWindowFocus: false,
     onSuccess,
     onError
@@ -13,36 +38,20 @@ export default function useCategories() {
 
   const queryClient = useQueryClient();
 
-  const addCategoryRequest = (categoryName) => request({
-    url: '/categories',
-    method: 'post',
-    data: {
-      name: categoryName,
-      root: null,
-      ancestors: []
-    }
-  });
-
-  const mutation = useMutation(addCategoryRequest, {
+  const addCategoryMutation = useMutation(addCategoryRequest, {
     onSuccess: (data) => {
-      queryClient.setQueryData('categories', (oldQueryData) => ({
+      queryClient.setQueryData(QUERY_CATEGORIES, (oldQueryData) => ({
         ...oldQueryData,
         data: [...oldQueryData.data, data.data]
       }));
     }
   });
 
-  const addCategory = (newCategoryName) => mutation.mutate(newCategoryName);
-
-  const updateCategoryRequest = ({ categoryName, categoryId }) => request({
-    url: `/categories/${categoryId}`,
-    method: 'put',
-    data: { name: categoryName }
-  });
+  const addCategory = (newCategoryName) => addCategoryMutation.mutate(newCategoryName);
 
   const updateCategoryMutation = useMutation(updateCategoryRequest, {
     onSuccess: (data) => {
-      queryClient.invalidateQueries('categories');
+      queryClient.invalidateQueries(QUERY_CATEGORIES);
     }
   });
 
@@ -50,14 +59,9 @@ export default function useCategories() {
     { categoryName, categoryId }
   );
 
-  const deleteCategoryRequest = (categoryId) => request({
-    url: `/categories/${categoryId}`,
-    method: 'delete'
-  });
-
   const deleteCategoryMutation = useMutation(deleteCategoryRequest, {
     onSuccess: (data) => {
-      queryClient.invalidateQueries('categories');
+      queryClient.invalidateQueries(QUERY_CATEGORIES);
     }
   });
 

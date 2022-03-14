@@ -30,3 +30,7 @@ function handleApiError(error) {
     console.log('Error', error);
   }
 }
+
+export const HTTP_POST = 'post';
+export const HTTP_PUT = 'put';
+export const HTTP_DELETE = 'delete';
