@@ -10,6 +10,7 @@ import history from '../history';
 import { AuthProvider } from '../Context/AuthContext';
 import { CategoriesProvider } from '../Context/CategoriesContext';
 import Login from '../pages/Login';
+import { WalletsProvider } from '../Context/WalletsContext';
 
 const theme = createTheme();
 const queryClient = new QueryClient();
@@ -20,14 +21,16 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <CssBaseline />
         <AuthProvider>
-          <CategoriesProvider>
-            <Router history={history}>
-              <Switch>
-                <Route exact path="/login" component={Login} />
-                <Routes />
-              </Switch>
-            </Router>
-          </CategoriesProvider>
+          <WalletsProvider>
+            <CategoriesProvider>
+              <Router history={history}>
+                <Switch>
+                  <Route exact path="/login" component={Login} />
+                  <Routes />
+                </Switch>
+              </Router>
+            </CategoriesProvider>
+          </WalletsProvider>
         </AuthProvider>
       </QueryClientProvider>
     </ThemeProvider>

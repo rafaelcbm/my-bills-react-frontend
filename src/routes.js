@@ -7,11 +7,11 @@ import { Container, Grid } from '@mui/material';
 import { AuthContext } from './Context/AuthContext';
 import './App/App.css';
 
-import Categories from './pages/Categories';
+import { Categories } from './pages/Categories';
 import Page404 from './pages/Page404';
-import Bills from './pages/Bills';
 import Header from './components/Header';
 import MonthlyBills from './pages/MonthlyBills.page';
+import { Wallets } from './pages/Wallets';
 
 function CustomRoute({ isPrivate, ...rest }) {
   const { loading, authenticated } = useContext(AuthContext);
@@ -43,9 +43,9 @@ export default function Routes() {
   return (
     <Switch>
       <CustomRoute isPrivate exact path="/" component={MonthlyBills} />
+      <CustomRoute isPrivate exact path="/wallets" component={Wallets} />
       <CustomRoute isPrivate exact path="/categories" component={Categories} />
       <CustomRoute isPrivate exact path="/monthly-bills" component={MonthlyBills} />
-      <CustomRoute isPrivate exact path="/bills" component={Bills} />
       <Route>
         <Page404 />
       </Route>
