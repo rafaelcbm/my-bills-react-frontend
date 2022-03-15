@@ -2,7 +2,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Toolbar, AppBar, Typography } from '@mui/material';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
-import LogoutIcon from '@mui/icons-material/Logout';
 
 import styles from './Header.module.css';
 import Logout from '../Logout';
@@ -25,6 +24,10 @@ function Header() {
 
           <Typography variant="h6" style={{ flexGrow: '1' }}>
             <Link className={styles.header_link} to="/">Home</Link>
+          </Typography>
+
+          <Typography variant="h6" style={{ flexGrow: '1' }}>
+            <Link className={styles.header_link} to="/wallets">Wallets</Link>
           </Typography>
 
           <Typography variant="h6" style={{ flexGrow: '1' }}>
