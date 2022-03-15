@@ -5,7 +5,6 @@ import Category from '../components/Category';
 import useCategories from '../hooks/useCategories';
 
 export function Categories() {
-  console.log('Categories - COMPONENT');
   const [newCategory, setNewCategory] = useState('');
 
   const { categories, setCategories } = useContext(CategoriesContext);

@@ -1,5 +1,4 @@
 import React, { createContext, useState } from 'react';
-import useCategories from '../hooks/useCategories';
 
 const CategoriesContext = createContext();
 
