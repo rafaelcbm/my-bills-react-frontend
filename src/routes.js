@@ -7,11 +7,11 @@ import { Container, Grid } from '@mui/material';
 import { AuthContext } from './Context/AuthContext';
 import './App/App.css';
 
-import { Categories } from './pages/Categories';
-import Page404 from './pages/Page404';
+import { Categories } from './pages/Categories.page';
+import Page404 from './pages/Page404.page';
 import Header from './components/Header';
 import MonthlyBills from './pages/MonthlyBills.page';
-import { Wallets } from './pages/Wallets';
+import { Wallets } from './pages/Wallets.page';
 
 function CustomRoute({ isPrivate, ...rest }) {
   const { loading, authenticated } = useContext(AuthContext);

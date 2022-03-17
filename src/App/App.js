@@ -9,7 +9,7 @@ import history from '../history';
 
 import { AuthProvider } from '../Context/AuthContext';
 import { CategoriesProvider } from '../Context/CategoriesContext';
-import Login from '../pages/Login';
+import Login from '../pages/Login.page';
 import { WalletsProvider } from '../Context/WalletsContext';
 
 const theme = createTheme();
