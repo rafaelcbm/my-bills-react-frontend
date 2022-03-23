@@ -1,12 +1,17 @@
-import React, { useState, useContext } from 'react';
+import React, { useContext } from 'react';
 
+import { Button, Grid, TextField } from '@mui/material';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import { useForm, SubmitHandler, Controller } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+
+import PageHeader from '../components/PageHeader';
 import { WalletsContext } from '../Context/WalletsContext';
 import Wallet from '../components/Wallet';
 import useWallets from '../hooks/useWallets';
 
 export function Wallets() {
-  const [newWallet, setNewWallet] = useState('');
-
   const { wallets, setWallets } = useContext(WalletsContext);
 
   const { addWallet, queryWallets } = useWallets();
@@ -19,40 +24,80 @@ export function Wallets() {
     isLoading, data, isError, error, refetch
   } = queryWallets(onSuccessQueryWallets, onErrorQueryWallets);
 
-  const addWalletBtnClick = () => {
-    addWallet(newWallet);
-    // refetch();
-    setNewWallet('');
+  const schema = yup.object().shape({
+    name: yup.string().required()
+  });
+
+  const {
+    register,
+    control,
+    handleSubmit,
+    watch,
+    reset,
+    formState: { errors },
+  } = useForm({ resolver: yupResolver(schema), });
+
+  const onSubmit = (frmData) => {
+    addWallet(frmData.name);
+    reset();
   };
 
   return (
-    <div>
-      <div>
-        <ul>
-          {wallets.map((wallet) => (
-            <Wallet
-              key={wallet.id}
-              wallet={wallet}
-            />
-          ))}
-        </ul>
-      </div>
-
-      <div>
-        <input
-          type="text"
-          value={newWallet}
-          onChange={(event) => {
-            setNewWallet(event.target.value);
-          }}
-          placeholder="Wallet Name"
+    <Grid container>
+      <Grid item xs={12}>
+        <PageHeader
+          title="Wallets"
+          subTitle="Wallets CRUD"
+          icon={<AttachMoneyIcon fontSize="large" />}
         />
-      </div>
+      </Grid>
 
-      <div>
-        <button type="button" onClick={addWalletBtnClick}>Add</button>
-      </div>
-    </div>
+      <Grid item xs={12}>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div>
+            <ul>
+              {wallets.map((wallet) => (
+                <Wallet
+                  key={wallet.id}
+                  wallet={wallet}
+                />
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <Controller
+              name="name"
+              control={control}
+              defaultValue=""
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  type="text"
+                  label="Name"
+                  variant="outlined"
+                  error={!!errors.name}
+                  helperText={errors.name ? errors.name?.message : ''}
+                  fullWidth
+                  margin="dense"
+                />
+              )}
+            />
+          </div>
+
+          <Button
+            variant="outlined"
+            size="large"
+            color="primary"
+            type="submit"
+          >
+            Add
+          </Button>
+        </form>
+      </Grid>
+
+    </Grid>
+
   );
 }
 
