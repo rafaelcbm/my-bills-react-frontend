@@ -1,4 +1,12 @@
-import React, { useReducer, useState } from 'react';
+/* eslint-disable react/jsx-no-bind */
+import React, { useReducer } from 'react';
+
+import {
+  Button, TextField, Typography
+} from '@mui/material';
+import { useForm, Controller } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 
 import useWallets from '../hooks/useWallets';
 
@@ -42,40 +50,111 @@ function reducer(state, action) {
 }
 
 export default function Wallet({ wallet }) {
-  const [walletName, setWalletName] = useState('');
   const [fieldState, dispatchFieldUpdate] = useReducer(reducer, initialState);
 
   const { updateWallet, deleteWallet } = useWallets();
-
-  function onSaveBtnClick() {
-    dispatchFieldUpdate('save');
-    setWalletName('');
-    updateWallet(walletName, wallet.id);
-  }
 
   function onDeleteBtnClick() {
     dispatchFieldUpdate('delete');
     deleteWallet(wallet.id);
   }
 
-  return (
-    <li>
-      {wallet.name}
-      {fieldState.enableEdit && (
-      <input
-        type="text"
-        value={walletName}
-        onChange={(event) => {
-          setWalletName(event.target.value);
-        }}
-        placeholder={wallet.name}
-      />
-      )}
-      {fieldState.showEdit && <button type="button" onClick={() => dispatchFieldUpdate('edit')}>Edit</button>}
-      {fieldState.showSave && <button type="button" onClick={onSaveBtnClick}>Save</button>}
-      {fieldState.showCancel && <button type="button" onClick={() => dispatchFieldUpdate('cancel')}>Cancel</button>}
-      {fieldState.showDelete && <button type="button" onClick={onDeleteBtnClick}>Delete</button>}
-    </li>
+  const schema = yup.object().shape({
+    name: yup.string().required()
+  });
 
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm({ resolver: yupResolver(schema), });
+
+  const onSubmit = (frmData) => {
+    dispatchFieldUpdate('save');
+    updateWallet(frmData.name, wallet.id);
+    reset();
+  };
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <li>
+        <Typography variant="h6" component="span">
+          {wallet.name}
+        </Typography>
+
+        {fieldState.enableEdit && (
+        <Controller
+          name="name"
+          control={control}
+          defaultValue=""
+          render={({ field }) => (
+            <TextField
+              {...field}
+              type="text"
+              placeholder={wallet.name}
+              label="Name"
+              variant="outlined"
+              error={!!errors.name}
+              helperText={errors.name ? errors.name?.message : ''}
+              fullWidth
+              margin="dense"
+            />
+          )}
+        />
+        )}
+        {fieldState.showEdit
+          && (
+          <Button
+            style={{ margin: '0.5em 1em' }}
+            variant="outlined"
+            size="small"
+            color="secondary"
+            type="button"
+            onClick={() => dispatchFieldUpdate('edit')}
+          >
+            Edit
+          </Button>
+          )}
+
+        {fieldState.showSave && (
+        <Button
+          variant="outlined"
+          size="small"
+          color="primary"
+          type="submit"
+        >
+          Save
+        </Button>
+        )}
+        {fieldState.showCancel
+           && (
+           <Button
+             style={{ marginLeft: '0.5em' }}
+             variant="outlined"
+             size="small"
+             color="secondary"
+             type="button"
+             onClick={() => dispatchFieldUpdate('cancel')}
+           >
+             Cancel
+           </Button>
+           )}
+
+        {fieldState.showDelete
+       && (
+       <Button
+         style={{ marginLeft: '0.5em' }}
+         variant="outlined"
+         size="small"
+         color="error"
+         type="button"
+         onClick={onDeleteBtnClick}
+       >
+         Delete
+       </Button>
+       )}
+      </li>
+    </form>
   );
 }

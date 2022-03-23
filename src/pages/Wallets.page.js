@@ -55,17 +55,6 @@ export function Wallets() {
       <Grid item xs={12}>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div>
-            <ul>
-              {wallets.map((wallet) => (
-                <Wallet
-                  key={wallet.id}
-                  wallet={wallet}
-                />
-              ))}
-            </ul>
-          </div>
-
-          <div>
             <Controller
               name="name"
               control={control}
@@ -94,6 +83,21 @@ export function Wallets() {
             Add
           </Button>
         </form>
+      </Grid>
+
+      <Grid item xs={12}>
+
+        <div>
+          <ul>
+            {wallets.map((wallet) => (
+              <Wallet
+                key={wallet.id}
+                wallet={wallet}
+              />
+            ))}
+          </ul>
+        </div>
+
       </Grid>
 
     </Grid>
